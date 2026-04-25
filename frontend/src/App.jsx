@@ -1,4 +1,7 @@
+import "./App.css";
 import { useEffect, useState } from "react";
+import HabitForm from "./components/HabitForm";
+import HabitList from "./components/HabitList";
 
 function App() {
   const [habits, setHabits] = useState([]);
@@ -79,35 +82,50 @@ function App() {
     }
   };
 
+  const editarHabito = async (id, nuevoNombre) => {
+  try {
+    const response = await fetch(`http://localhost:3000/habits/${id}/edit`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ nombre: nuevoNombre })
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al editar el hábito");
+    }
+
+    const habitoActualizado = await response.json();
+
+    setHabits((prevHabits) =>
+      prevHabits.map((habit) =>
+        habit.id === id ? habitoActualizado : habit
+      )
+    );
+  } catch (error) {
+    console.error("Error al editar el hábito:", error);
+  }
+};
+
   return (
-    <div>
+    <div className="container">
       <h1>Gestor de Hábitos</h1>
 
-      <form onSubmit={agregarHabito}>
-        <input
-          type="text"
-          placeholder="Escribe un hábito"
-          value={nuevoHabito}
-          onChange={(e) => setNuevoHabito(e.target.value)}
-        />
-        <button type="submit">Añadir hábito</button>
-      </form>
+      <HabitForm
+        nuevoHabito={nuevoHabito}
+        setNuevoHabito={setNuevoHabito}
+        agregarHabito={agregarHabito}
+      />
 
       <h2>Lista de hábitos</h2>
 
-      <ul>
-        {habits.map((habit) => (
-          <li key={habit.id}>
-            {habit.nombre} - {habit.completado ? "Hecho" : "Pendiente"}{" "}
-            <button type="button" onClick={() => cambiarEstadoHabito(habit.id)}>
-              {habit.completado ? "Marcar como pendiente" : "Marcar como hecho"}
-            </button>{" "}
-            <button type="button" onClick={() => eliminarHabito(habit.id)}>
-              Eliminar
-            </button>
-          </li>
-        ))}
-      </ul>
+      <HabitList
+        habits={habits}
+        cambiarEstadoHabito={cambiarEstadoHabito}
+        eliminarHabito={eliminarHabito}
+        editarHabito={editarHabito}
+      />
     </div>
   );
 }
