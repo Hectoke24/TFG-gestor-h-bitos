@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const pool = require("./config/db");
 const habitRoutes = require("./routes/habitRoutes");
 
 const app = express();
@@ -13,6 +14,14 @@ app.get("/", (req, res) => {
 });
 
 app.use("/habits", habitRoutes);
+
+pool.query("SELECT NOW()", (err, result) => {
+  if (err) {
+    console.error("Error conectando con PostgreSQL:", err);
+  } else {
+    console.log("Conexión a PostgreSQL correcta");
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
