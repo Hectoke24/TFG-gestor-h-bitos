@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
@@ -9,16 +10,40 @@ import {
   PieChart,
   Pie,
   Cell,
-  Legend
+  Legend,
+  LineChart,
+  Line
 } from "recharts";
 
 function Stats({ habits }) {
+  const [dailyStats, setDailyStats] = useState([]);
+
   const totalHabitos = habits.length;
   const habitosCompletados = habits.filter((habit) => habit.completado).length;
   const habitosPendientes = totalHabitos - habitosCompletados;
 
   const porcentajeCompletados =
     totalHabitos > 0 ? Math.round((habitosCompletados / totalHabitos) * 100) : 0;
+
+  useEffect(() => {
+    const cargarEstadisticasDiarias = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/habits/stats/daily");
+        const data = await response.json();
+
+        const datosFormateados = data.map((item) => ({
+          fecha: item.fecha,
+          completados: Number(item.completados)
+        }));
+
+        setDailyStats(datosFormateados);
+      } catch (error) {
+        console.error("Error al cargar estadísticas diarias:", error);
+      }
+    };
+
+    cargarEstadisticasDiarias();
+  }, []);
 
   const barData = [
     { nombre: "Completados", cantidad: habitosCompletados },
@@ -92,6 +117,21 @@ function Stats({ habits }) {
               <Tooltip />
               <Legend />
             </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="chart-box" style={{ marginTop: "24px" }}>
+        <h2>Progreso diario</h2>
+        <div style={{ width: "100%", height: 320 }}>
+          <ResponsiveContainer>
+            <LineChart data={dailyStats}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="fecha" />
+              <YAxis allowDecimals={false} />
+              <Tooltip />
+              <Line type="monotone" dataKey="completados" />
+            </LineChart>
           </ResponsiveContainer>
         </div>
       </div>

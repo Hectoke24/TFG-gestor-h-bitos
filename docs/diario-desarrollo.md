@@ -41,6 +41,17 @@
     - Se creó una pantalla de estadísticas con gráficos.
     - Se mejoró la navegación y el diseño visual general de la aplicación.
 
+- 26/04/2026
+    - Se ha creado una tabla de historial diario para los hábitos.
+    - Se ha comenzado a guardar el progreso diario en la base de datos.
+    - Se ha añadido una ruta para estadísticas diarias.
+    - Se ha añadido una nueva sección de rutinas.
+    - Se han creado tablas para rutinas y ejercicios.
+    - Se ha añadido una ruta backend para obtener rutinas desde PostgreSQL.
+    - Se ha conectado la sección de rutinas con la base de datos.
+
+
+
 ### Estado actual
 - 11/04/2026
     - El fronted funcionando correctamente.
@@ -61,6 +72,11 @@
     - Existe una pantalla de estadísticas con gráficos y resumen visual de los datos.
     - La interfaz tiene un aspecto más limpio, ordenado y presentable.
 
+- 26/04/2026
+    - La aplicación ya permite gestionar hábitos con persistencia real.
+    - Existe una pantalla de estadísticas con gráficos y progreso diario.
+    - Existe una pantalla de rutinas conectada al backend y a PostgreSQL.
+
 ### Proximos pasos
 - 11/04/2026 para el proximo dia:
     - Marcar hábitos como completados.
@@ -80,3 +96,10 @@
     - Preparar la estructura necesaria para mostrar progreso por días o semanas.
     - Revisar y organizar mejor el backend y el frontend.
     - Continuar avanzando en la documentación del TFG y en la preparación de la versión final.
+
+- 26/04/2026
+    - Mejorar la pantalla de rutinas y añadir más contenido.
+    - Seguir ampliando las estadísticas con datos semanales.
+    - Mejorar la estructura interna del backend para separarlo mejor en rutas, controladores y acceso a datos.
+    - Revisar y seguir mejorando el diseño general de la aplicación.
+    - Preparar la unión de la rama `feature/base-datos` con `main` cuando esta fase quede cerrada.

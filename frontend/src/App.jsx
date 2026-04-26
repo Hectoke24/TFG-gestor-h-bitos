@@ -5,6 +5,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Stats from "./pages/Stats";
+import Rutinas from "./pages/Rutinas";
 
 function App() {
   const [habits, setHabits] = useState([]);
@@ -137,6 +138,7 @@ function App() {
             }
           />
           <Route path="/estadisticas" element={<Stats habits={habits} />} />
+          <Route path="/rutinas" element={<Rutinas />} />
         </Routes>
       </div>
     </BrowserRouter>

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const pool = require("./config/db");
 const habitRoutes = require("./routes/habitRoutes");
+const routineRoutes = require("./routes/routineRoutes");
 
 const app = express();
 const PORT = 3000;
@@ -14,8 +15,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/habits", habitRoutes);
+app.use("/routines", routineRoutes);
 
-pool.query("SELECT NOW()", (err, result) => {
+pool.query("SELECT NOW()", (err) => {
   if (err) {
     console.error("Error conectando con PostgreSQL:", err);
   } else {
@@ -26,4 +28,3 @@ pool.query("SELECT NOW()", (err, result) => {
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
-

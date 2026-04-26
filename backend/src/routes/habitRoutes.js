@@ -103,4 +103,21 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
+router.get("/stats/daily", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT fecha, COUNT(*) AS completados
+      FROM habit_logs
+      WHERE completado = true
+      GROUP BY fecha
+      ORDER BY fecha ASC
+    `);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("Error al obtener estadísticas diarias:", error);
+    res.status(500).json({ error: "Error al obtener estadísticas diarias" });
+  }
+});
+
 module.exports = router;

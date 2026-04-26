@@ -209,3 +209,174 @@ ul {
   margin-top: 0;
   margin-bottom: 20px;
 }
+
+.rutinas-page {
+  margin-top: 10px;
+}
+
+.rutinas-subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.rutinas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.rutina-card {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.rutina-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 20px;
+}
+
+.rutina-card h3 {
+  margin-top: 18px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.rutina-card p {
+  margin: 8px 0;
+  color: #374151;
+}
+
+.rutina-lista {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.rutina-lista li {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 6px;
+  list-style: disc;
+}
+
+.rutinas-filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.rutinas-filtros button {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.rutinas-filtros button:hover {
+  background-color: #d1d5db;
+}
+
+.rutinas-page {
+  margin-top: 10px;
+}
+
+.rutinas-subtitle {
+  text-align: center;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.rutinas-filtros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.rutinas-filtros button {
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.rutinas-filtros button:hover {
+  background-color: #d1d5db;
+}
+
+.rutinas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.rutina-card {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.rutina-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.rutina-card h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #111827;
+}
+
+.rutina-badge {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.rutina-duracion {
+  margin: 8px 0;
+  color: #374151;
+}
+
+.rutina-descripcion {
+  color: #4b5563;
+  margin-bottom: 16px;
+}
+
+.rutina-card h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.rutina-lista {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.rutina-lista li {
+  background: none;
+  border: none;
+  padding: 0;
+  margin-bottom: 8px;
+  list-style: disc;
+  color: #374151;
+}
+
+.filtro-activo {
+  background-color: #2563eb !important;
+  color: white !important;
+}
