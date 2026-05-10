@@ -9,6 +9,33 @@
     - Aunque el backend cambia correctamente el valor del hábito, en el frontend sigue siendo necesario recargar el navegador para ver el cambio.
     - Durante el desarrollo también aparecieron errores puntuales al añadir la función de eliminar hábitos y al reorganizar parte del código en 'App.jsx'.
 
+- 25/04/2026
+    - Fue necesario instalar y configurar PostgreSQL en el entorno local para integrar la base de datos en el proyecto.
+    - Preparar correctamente la conexión entre el backend y PostgreSQL, incluyendo la creación de la base de datos y la tabla de hábitos.
+    - Sustituir el almacenamiento temporal en memoria por consultas reales a base de datos sin romper las funcionalidades que ya funcionaban.
+    - Reorganizar parte del backend para dejar la aplicación preparada para trabajar con persistencia real.
+    - Adaptar la aplicación para manejar varias pantallas con navegación entre vistas.
+    - La parte visual de la aplicación todavía requería mejoras para que la navegación, la pantalla principal y la pantalla de estadísticas tuvieran un aspecto más claro y uniforme.
+
+- 01/05/2026
+    - Al comenzar la ampliación de estadísticas, la gráfica semanal no se actualizaba correctamente porque la tabla `habit_logs` no estaba cambiando al modificar el estado de los hábitos.
+    - Fue necesario revisar la lógica de la ruta `PUT /habits/:id` para asegurar que además de actualizar el hábito también se insertaran o eliminaran correctamente los registros diarios.
+    - Hubo que añadir nuevas rutas backend para estadísticas semanales, racha actual y racha máxima.
+    - Se amplió la sección de rutinas para que pudiera filtrar rutinas por grupo muscular.
+    - Fue necesario conectar la sección de rutinas con la base de datos para dejar de usar datos fijos escritos directamente en el frontend.
+
+- 26/04/2026
+    - Fue necesario plantear una estructura de seguimiento diario para que los hábitos no dependieran solo de un estado fijo de completado.
+    - Hubo que adaptar la aplicación para poder generar estadísticas diarias a partir del historial real de uso.
+    - También fue necesario ampliar el proyecto con una nueva sección de rutinas sin romper la estructura ya creada.
+
+- 01/05/2026
+    - La tabla `habit_logs` no se actualizaba correctamente al cambiar el estado de los hábitos, lo que hacía que las estadísticas semanales no reflejaran bien los cambios.
+    - La racha actual no mostraba el valor correcto y seguía apareciendo a 0.
+    - Fue necesario revisar la lógica de estadísticas para añadir también la racha máxima y mejorar la coherencia de los datos mostrados.
+    - La sección de rutinas necesitaba dejar de usar datos fijos en el frontend para pasar a trabajar con la base de datos.
+    - También fue necesario ajustar el diseño de la aplicación para que las categorías, los filtros y las tarjetas de estadísticas se vieran mejor y de forma más ordenada.
+
 ### Soluciones aplicadas
 - 11/04/2026
     - Correccion del comando para crear Vite.
@@ -23,6 +50,59 @@
     - Se hicieron pruebas adicionales en 'main.jsx' para intentar detectar el origen del problema de actualización automática.
     - Se comprobó que la función de eliminar hábitos funciona correctamente y que el backend responde bien a las peticiones.
 
+- 25/04/2026
+    - Se instaló y configuró PostgreSQL en el equipo.
+    - Se creó la base de datos del proyecto y la tabla `habits`.
+    - Se conectó el backend con PostgreSQL mediante el paquete `pg`.
+    - Se sustituyó el uso de datos en memoria por consultas reales a la base de datos.
+    - Se movieron los datos sensibles de conexión al archivo `.env`.
+    - Se añadieron varias pantallas con React Router.
+    - Se creó una pantalla de estadísticas con gráficos.
+    - Se mejoró la navegación y el diseño visual general de la aplicación.
+
+- 26/04/2026
+    - Se ha creado una tabla de historial diario para los hábitos.
+    - Se ha comenzado a guardar el progreso diario en la base de datos.
+    - Se ha añadido una ruta para estadísticas diarias.
+    - Se ha añadido una nueva sección de rutinas.
+    - Se han creado tablas para rutinas y ejercicios.
+    - Se ha añadido una ruta backend para obtener rutinas desde PostgreSQL.
+    - Se ha conectado la sección de rutinas con la base de datos.
+
+- 01/05/2026
+    - Se corrigió la ruta `PUT /habits/:id` para que actualice también la tabla `habit_logs`.
+    - Se añadieron estadísticas semanales a partir del historial diario guardado en PostgreSQL.
+    - Se creó la ruta `GET /habits/stats/weekly`.
+    - Se añadió la racha actual a la pantalla de estadísticas.
+    - Se añadió la racha máxima a la pantalla de estadísticas mediante la ruta `GET /habits/stats/max-streak`.
+    - Se creó la tabla `routines` para almacenar rutinas.
+    - Se creó la tabla `routine_exercises` para almacenar los ejercicios de cada rutina.
+    - Se añadió la ruta `GET /routines` para obtener las rutinas desde PostgreSQL.
+    - Se conectó la pantalla de rutinas al backend y a la base de datos.
+    - Se mejoró la pantalla de rutinas añadiendo filtros por grupo muscular.
+
+- 26/04/2026
+    - Se creó la tabla `habit_logs` para guardar el historial diario de hábitos.
+    - Se añadió una ruta backend para obtener estadísticas diarias.
+    - Se incorporó una nueva pantalla de rutinas en la aplicación.
+    - Se crearon las tablas necesarias para almacenar rutinas y ejercicios en la base de datos.
+    - Se añadió la ruta backend para obtener las rutinas desde PostgreSQL.
+    - Se conectó la sección de rutinas con la base de datos.
+
+- 01/05/2026
+    - Se corrigió la ruta `PUT /habits/:id` para que actualice correctamente la tabla `habit_logs`.
+    - Se añadieron estadísticas semanales a partir de los datos guardados en la base de datos.
+    - Se creó la ruta `GET /habits/stats/weekly`.
+    - Se añadió la racha actual a la pantalla de estadísticas.
+    - Se añadió la racha máxima mediante la ruta `GET /habits/stats/max-streak`.
+    - Se conectó definitivamente la pantalla de rutinas al backend y a PostgreSQL.
+    - Se añadieron filtros por grupo muscular en la sección de rutinas.
+    - Se incorporaron categorías a los hábitos.
+    - Se añadieron filtros por categoría en la pantalla principal.
+    - Se añadieron estadísticas por categoría.
+    - Se modificó la lógica de la aplicación para que los hábitos se comporten como hábitos diarios, apareciendo pendientes cada nuevo día.
+    - Se realizaron mejoras visuales y de responsive para dejar la aplicación más cuidada y uniforme.
+    - Se añadieron iconos en la navegación para dar un mejor acabado visual a la aplicación.
 
 ### Estado actual
 - 11/04/2026
@@ -37,6 +117,39 @@
     - El cambio de estado de los hábitos funciona en el backend.
     - Sigue pendiente corregir la actualización automática del estado en el frontend.
 
+- 25/04/2026
+    - La aplicación ya utiliza PostgreSQL como base de datos y los hábitos se guardan de forma persistente.
+    - El sistema permite mostrar, añadir, editar, completar y eliminar hábitos.
+    - La aplicación cuenta con navegación entre varias pantallas.
+    - Existe una pantalla de estadísticas con gráficos y resumen visual de los datos.
+    - La interfaz tiene un aspecto más limpio, ordenado y presentable.
+
+- 26/04/2026
+    - La aplicación ya permite gestionar hábitos con persistencia real.
+    - Existe una pantalla de estadísticas con gráficos y progreso diario.
+    - Existe una pantalla de rutinas conectada al backend y a PostgreSQL.
+
+- 01/05/2026
+    - La aplicación ya permite mostrar estadísticas diarias y semanales.
+    - La aplicación ya muestra la racha actual y la racha máxima.
+    - La tabla `habit_logs` se actualiza correctamente al cambiar el estado de los hábitos.
+    - La sección de rutinas ya obtiene la información desde PostgreSQL.
+    - La pantalla de rutinas ya permite filtrar las rutinas por grupo muscular.
+    - La aplicación cuenta con una estructura más completa y orientada a una versión final más sólida.
+
+- 26/04/2026
+    - La aplicación ya permite gestionar hábitos con persistencia real en PostgreSQL.
+    - Existe una pantalla de estadísticas con gráficos y progreso diario.
+    - Existe una pantalla de rutinas conectada al backend y a PostgreSQL.
+
+- 01/05/2026
+    - La aplicación ya permite mostrar hábitos, añadirlos, editarlos, eliminarlos y clasificarlos por categoría.
+    - Los hábitos se comportan como hábitos diarios y se reinician de forma natural cada nuevo día.
+    - La aplicación dispone de estadísticas diarias, semanales, racha actual y racha máxima.
+    - La pantalla de estadísticas muestra gráficos de barras, gráfico circular, progreso diario, progreso semanal y distribución por categorías.
+    - La sección de rutinas ya obtiene sus datos desde la base de datos y permite filtrarlas por grupo muscular.
+    - La navegación, el diseño general y la adaptación visual de la aplicación están bastante avanzados y cercanos a una versión final.
+
 ### Proximos pasos
 - 11/04/2026 para el proximo dia:
     - Marcar hábitos como completados.
@@ -49,3 +162,24 @@
     - Revisar con más detalle la comunicación entre frontend y backend.
     - Continuar con la organización del código en componentes.
     - Seguir avanzando en la estructura general de la aplicación.
+
+- 25/04/2026
+    - Seguir mejorando el diseño visual general de la aplicación.
+    - Ampliar la parte de estadísticas con datos más completos y útiles.
+    - Preparar la estructura necesaria para mostrar progreso por días o semanas.
+    - Revisar y organizar mejor el backend y el frontend.
+    - Continuar avanzando en la documentación del TFG y en la preparación de la versión final.
+
+- 26/04/2026
+    - Mejorar la pantalla de rutinas y añadir más contenido.
+    - Seguir ampliando las estadísticas con datos semanales.
+    - Mejorar la estructura interna del backend para separarlo mejor en rutas, controladores y acceso a datos.
+    - Revisar y seguir mejorando el diseño general de la aplicación.
+    - Preparar la unión de la rama `feature/base-datos` con `main` cuando esta fase quede cerrada.
+
+- 01/05/2026
+    - Seguir mejorando la parte de estadísticas para mostrar información todavía más útil.
+    - Añadir nuevas funcionalidades a los hábitos, como categorías o filtros.
+    - Seguir mejorando el diseño visual general y la adaptación responsive.
+    - Revisar y organizar mejor la estructura interna del backend.
+    - Preparar el cierre de la rama `feature/base-datos` para unirla a `main` cuando esta fase quede terminada.

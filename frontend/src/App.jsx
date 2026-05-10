@@ -1,12 +1,17 @@
-import "./App.css";
 import { useEffect, useState } from "react";
-import HabitForm from "./components/HabitForm";
-import HabitList from "./components/HabitList";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Stats from "./pages/Stats";
+import Rutinas from "./pages/Rutinas";
 
 function App() {
   const [habits, setHabits] = useState([]);
   const [nuevoHabito, setNuevoHabito] = useState("");
-  const [recargar, setRecargar] = useState(false);
+  const [categoria, setCategoria] = useState("General");
+  const [filtroCategoria, setFiltroCategoria] = useState("Todas");
 
   const cargarHabitos = async () => {
     try {
@@ -20,7 +25,7 @@ function App() {
 
   useEffect(() => {
     cargarHabitos();
-  }, [recargar]);
+  }, []);
 
   const agregarHabito = async (e) => {
     e.preventDefault();
@@ -33,7 +38,7 @@ function App() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ nombre: nuevoHabito })
+        body: JSON.stringify({ nombre: nuevoHabito, categoria })
       });
 
       if (!response.ok) {
@@ -58,38 +63,51 @@ function App() {
         throw new Error("Error al actualizar el hábito");
       }
 
-      setRecargar((prev) => !prev);
+      const habitoActualizado = await response.json();
+
+      setHabits((prevHabits) =>
+        prevHabits.map((habit) =>
+          habit.id === id ? habitoActualizado : habit
+        )
+      );
     } catch (error) {
       console.error("Error al actualizar el hábito:", error);
     }
   };
 
   const eliminarHabito = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:3000/habits/${id}`, {
-        method: "DELETE"
-      });
+  const confirmar = window.confirm("¿Seguro que quieres eliminar este hábito?");
 
-      if (!response.ok) {
-        throw new Error("Error al eliminar el hábito");
-      }
+  if (!confirmar) return;
 
-      setHabits((prevHabits) =>
-        prevHabits.filter((habit) => habit.id !== id)
-      );
-    } catch (error) {
-      console.error("Error al eliminar el hábito:", error);
+  try {
+    const response = await fetch(`http://localhost:3000/habits/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar el hábito");
     }
+
+    setHabits((prevHabits) =>
+      prevHabits.filter((habit) => habit.id !== id)
+    );
+  } catch (error) {
+    console.error("Error al eliminar el hábito:", error);
+  }
   };
 
-  const editarHabito = async (id, nuevoNombre) => {
+  const editarHabito = async (id, nuevoNombre, nuevaCategoria) => {
   try {
     const response = await fetch(`http://localhost:3000/habits/${id}/edit`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ nombre: nuevoNombre })
+      body: JSON.stringify({
+        nombre: nuevoNombre,
+        categoria: nuevaCategoria
+      })
     });
 
     if (!response.ok) {
@@ -109,24 +127,34 @@ function App() {
 };
 
   return (
-    <div className="container">
-      <h1>Gestor de Hábitos</h1>
+    <BrowserRouter>
+      <div className="container">
+        <Navbar />
 
-      <HabitForm
-        nuevoHabito={nuevoHabito}
-        setNuevoHabito={setNuevoHabito}
-        agregarHabito={agregarHabito}
-      />
-
-      <h2>Lista de hábitos</h2>
-
-      <HabitList
-        habits={habits}
-        cambiarEstadoHabito={cambiarEstadoHabito}
-        eliminarHabito={eliminarHabito}
-        editarHabito={editarHabito}
-      />
-    </div>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Home
+                habits={habits}
+                nuevoHabito={nuevoHabito}
+                setNuevoHabito={setNuevoHabito}
+                categoria={categoria}
+                setCategoria={setCategoria}
+                agregarHabito={agregarHabito}
+                cambiarEstadoHabito={cambiarEstadoHabito}
+                eliminarHabito={eliminarHabito}
+                editarHabito={editarHabito}
+                filtroCategoria={filtroCategoria}
+                setFiltroCategoria={setFiltroCategoria}
+              />
+            }
+          />
+          <Route path="/estadisticas" element={<Stats habits={habits} />} />
+          <Route path="/rutinas" element={<Rutinas />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
