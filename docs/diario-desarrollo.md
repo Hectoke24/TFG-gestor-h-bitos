@@ -24,6 +24,18 @@
     - Se amplió la sección de rutinas para que pudiera filtrar rutinas por grupo muscular.
     - Fue necesario conectar la sección de rutinas con la base de datos para dejar de usar datos fijos escritos directamente en el frontend.
 
+- 26/04/2026
+    - Fue necesario plantear una estructura de seguimiento diario para que los hábitos no dependieran solo de un estado fijo de completado.
+    - Hubo que adaptar la aplicación para poder generar estadísticas diarias a partir del historial real de uso.
+    - También fue necesario ampliar el proyecto con una nueva sección de rutinas sin romper la estructura ya creada.
+
+- 01/05/2026
+    - La tabla `habit_logs` no se actualizaba correctamente al cambiar el estado de los hábitos, lo que hacía que las estadísticas semanales no reflejaran bien los cambios.
+    - La racha actual no mostraba el valor correcto y seguía apareciendo a 0.
+    - Fue necesario revisar la lógica de estadísticas para añadir también la racha máxima y mejorar la coherencia de los datos mostrados.
+    - La sección de rutinas necesitaba dejar de usar datos fijos en el frontend para pasar a trabajar con la base de datos.
+    - También fue necesario ajustar el diseño de la aplicación para que las categorías, los filtros y las tarjetas de estadísticas se vieran mejor y de forma más ordenada.
+
 ### Soluciones aplicadas
 - 11/04/2026
     - Correccion del comando para crear Vite.
@@ -69,6 +81,29 @@
     - Se conectó la pantalla de rutinas al backend y a la base de datos.
     - Se mejoró la pantalla de rutinas añadiendo filtros por grupo muscular.
 
+- 26/04/2026
+    - Se creó la tabla `habit_logs` para guardar el historial diario de hábitos.
+    - Se añadió una ruta backend para obtener estadísticas diarias.
+    - Se incorporó una nueva pantalla de rutinas en la aplicación.
+    - Se crearon las tablas necesarias para almacenar rutinas y ejercicios en la base de datos.
+    - Se añadió la ruta backend para obtener las rutinas desde PostgreSQL.
+    - Se conectó la sección de rutinas con la base de datos.
+
+- 01/05/2026
+    - Se corrigió la ruta `PUT /habits/:id` para que actualice correctamente la tabla `habit_logs`.
+    - Se añadieron estadísticas semanales a partir de los datos guardados en la base de datos.
+    - Se creó la ruta `GET /habits/stats/weekly`.
+    - Se añadió la racha actual a la pantalla de estadísticas.
+    - Se añadió la racha máxima mediante la ruta `GET /habits/stats/max-streak`.
+    - Se conectó definitivamente la pantalla de rutinas al backend y a PostgreSQL.
+    - Se añadieron filtros por grupo muscular en la sección de rutinas.
+    - Se incorporaron categorías a los hábitos.
+    - Se añadieron filtros por categoría en la pantalla principal.
+    - Se añadieron estadísticas por categoría.
+    - Se modificó la lógica de la aplicación para que los hábitos se comporten como hábitos diarios, apareciendo pendientes cada nuevo día.
+    - Se realizaron mejoras visuales y de responsive para dejar la aplicación más cuidada y uniforme.
+    - Se añadieron iconos en la navegación para dar un mejor acabado visual a la aplicación.
+
 ### Estado actual
 - 11/04/2026
     - El fronted funcionando correctamente.
@@ -101,6 +136,19 @@
     - La sección de rutinas ya obtiene la información desde PostgreSQL.
     - La pantalla de rutinas ya permite filtrar las rutinas por grupo muscular.
     - La aplicación cuenta con una estructura más completa y orientada a una versión final más sólida.
+
+- 26/04/2026
+    - La aplicación ya permite gestionar hábitos con persistencia real en PostgreSQL.
+    - Existe una pantalla de estadísticas con gráficos y progreso diario.
+    - Existe una pantalla de rutinas conectada al backend y a PostgreSQL.
+
+- 01/05/2026
+    - La aplicación ya permite mostrar hábitos, añadirlos, editarlos, eliminarlos y clasificarlos por categoría.
+    - Los hábitos se comportan como hábitos diarios y se reinician de forma natural cada nuevo día.
+    - La aplicación dispone de estadísticas diarias, semanales, racha actual y racha máxima.
+    - La pantalla de estadísticas muestra gráficos de barras, gráfico circular, progreso diario, progreso semanal y distribución por categorías.
+    - La sección de rutinas ya obtiene sus datos desde la base de datos y permite filtrarlas por grupo muscular.
+    - La navegación, el diseño general y la adaptación visual de la aplicación están bastante avanzados y cercanos a una versión final.
 
 ### Proximos pasos
 - 11/04/2026 para el proximo dia:

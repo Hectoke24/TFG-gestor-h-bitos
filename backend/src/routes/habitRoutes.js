@@ -4,8 +4,29 @@ const pool = require("../config/db");
 const router = express.Router();
 
 router.get("/", async (req, res) => {
+  const fechaHoy = new Date().toISOString().split("T")[0];
+
   try {
-    const result = await pool.query("SELECT * FROM habits ORDER BY id ASC");
+    const result = await pool.query(
+      `
+      SELECT 
+        h.id,
+        h.nombre,
+        h.categoria,
+        CASE 
+          WHEN hl.id IS NOT NULL THEN true
+          ELSE false
+        END AS completado
+      FROM habits h
+      LEFT JOIN habit_logs hl
+        ON h.id = hl.habit_id
+        AND hl.fecha = $1
+        AND hl.completado = true
+      ORDER BY h.id ASC
+      `,
+      [fechaHoy]
+    );
+
     res.json(result.rows);
   } catch (error) {
     console.error("Error al obtener hábitos:", error);
@@ -14,7 +35,7 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { nombre } = req.body;
+  const { nombre, categoria } = req.body;
 
   if (!nombre || nombre.trim() === "") {
     return res.status(400).json({ error: "El nombre del hábito es obligatorio" });
@@ -22,9 +43,9 @@ router.post("/", async (req, res) => {
 
   try {
     const result = await pool.query(
-      "INSERT INTO habits (nombre, completado) VALUES ($1, $2) RETURNING *",
-      [nombre, false]
-    );
+  "INSERT INTO habits (nombre, completado, categoria) VALUES ($1, $2, $3) RETURNING *",
+  [nombre, false, categoria || "General"]
+);
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -47,29 +68,33 @@ router.put("/:id", async (req, res) => {
       return res.status(404).json({ error: "Hábito no encontrado" });
     }
 
-    const habit = habitResult.rows[0];
-    const nuevoEstado = !habit.completado;
-
-    const updateResult = await pool.query(
-      "UPDATE habits SET completado = $1 WHERE id = $2 RETURNING *",
-      [nuevoEstado, id]
+    const logResult = await pool.query(
+      "SELECT * FROM habit_logs WHERE habit_id = $1 AND fecha = $2",
+      [id, fechaHoy]
     );
 
-    if (nuevoEstado === true) {
+    let completado;
+
+    if (logResult.rows.length > 0) {
+      await pool.query(
+        "DELETE FROM habit_logs WHERE habit_id = $1 AND fecha = $2",
+        [id, fechaHoy]
+      );
+      completado = false;
+    } else {
       await pool.query(
         `INSERT INTO habit_logs (habit_id, fecha, completado)
          VALUES ($1, $2, $3)
          ON CONFLICT (habit_id, fecha) DO NOTHING`,
         [id, fechaHoy, true]
       );
-    } else {
-      await pool.query(
-        "DELETE FROM habit_logs WHERE habit_id = $1 AND fecha = $2",
-        [id, fechaHoy]
-      );
+      completado = true;
     }
 
-    res.json(updateResult.rows[0]);
+    res.json({
+      ...habitResult.rows[0],
+      completado
+    });
   } catch (error) {
     console.error("Error al actualizar hábito:", error);
     res.status(500).json({ error: "Error al actualizar hábito" });
@@ -78,7 +103,7 @@ router.put("/:id", async (req, res) => {
 
 router.put("/:id/edit", async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const { nombre } = req.body;
+  const { nombre, categoria } = req.body;
 
   if (!nombre || nombre.trim() === "") {
     return res.status(400).json({ error: "El nombre del hábito es obligatorio" });
@@ -86,9 +111,9 @@ router.put("/:id/edit", async (req, res) => {
 
   try {
     const result = await pool.query(
-      "UPDATE habits SET nombre = $1 WHERE id = $2 RETURNING *",
-      [nombre, id]
-    );
+  "UPDATE habits SET nombre = $1, categoria = $2 WHERE id = $3 RETURNING *",
+  [nombre, categoria || "General", id]
+);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Hábito no encontrado" });
@@ -164,22 +189,27 @@ router.get("/stats/streak", async (req, res) => {
       ORDER BY fecha DESC
     `);
 
-    const fechas = result.rows.map((row) => row.fecha.toISOString().split("T")[0]);
-
-    if (fechas.length === 0) {
+    if (result.rows.length === 0) {
       return res.json({ rachaActual: 0 });
     }
 
+    const fechas = result.rows.map((row) => {
+      const fecha = new Date(row.fecha);
+      fecha.setHours(0, 0, 0, 0);
+      return fecha;
+    });
+
+    const hoy = new Date();
+    hoy.setHours(0, 0, 0, 0);
+
     let rachaActual = 0;
-    let fechaEsperada = new Date();
+    let fechaEsperada = new Date(hoy);
 
     for (const fecha of fechas) {
-      const fechaFormateada = fechaEsperada.toISOString().split("T")[0];
-
-      if (fecha === fechaFormateada) {
+      if (fecha.getTime() === fechaEsperada.getTime()) {
         rachaActual++;
         fechaEsperada.setDate(fechaEsperada.getDate() - 1);
-      } else {
+      } else if (fecha.getTime() < fechaEsperada.getTime()) {
         break;
       }
     }

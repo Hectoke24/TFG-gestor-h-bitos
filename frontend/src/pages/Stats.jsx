@@ -22,11 +22,24 @@ function Stats({ habits }) {
   const [maxStreak, setMaxStreak] = useState(0);
 
   const totalHabitos = habits.length;
-  const habitosCompletados = habits.filter((habit) => habit.completado).length;
-  const habitosPendientes = totalHabitos - habitosCompletados;
+  const habitosCompletadosHoy = habits.filter((habit) => habit.completado).length;
+  const habitosPendientes = totalHabitos - habitosCompletadosHoy;
 
   const porcentajeCompletados =
-    totalHabitos > 0 ? Math.round((habitosCompletados / totalHabitos) * 100) : 0;
+    totalHabitos > 0 ? Math.round((habitosCompletadosHoy / totalHabitos) * 100) : 0;
+
+  const categoriasData = Object.values(
+    habits.reduce((acc, habit) => {
+      const categoria = habit.categoria || "General";
+
+      if (!acc[categoria]) {
+        acc[categoria] = { categoria, cantidad: 0 };
+      }
+
+      acc[categoria].cantidad += 1;
+      return acc;
+    }, {})
+  );
 
   useEffect(() => {
     const cargarEstadisticas = async () => {
@@ -67,12 +80,12 @@ function Stats({ habits }) {
   }, [habits]);
 
   const barData = [
-    { nombre: "Completados", cantidad: habitosCompletados },
+    { nombre: "Completados hoy", cantidad: habitosCompletadosHoy },
     { nombre: "Pendientes", cantidad: habitosPendientes }
   ];
 
   const pieData = [
-    { name: "Completados", value: habitosCompletados },
+    { name: "Completados hoy", value: habitosCompletadosHoy },
     { name: "Pendientes", value: habitosPendientes }
   ];
 
@@ -89,13 +102,13 @@ function Stats({ habits }) {
         </div>
 
         <div className="stats-card">
-          <h3>Completados</h3>
-          <p>{habitosCompletados}</p>
+          <h3>Pendientes</h3>
+          <p>{habitosPendientes}</p>
         </div>
 
         <div className="stats-card">
-          <h3>Pendientes</h3>
-          <p>{habitosPendientes}</p>
+          <h3>Completados hoy</h3>
+          <p>{habitosCompletadosHoy}</p>
         </div>
 
         <div className="stats-card">
@@ -115,7 +128,7 @@ function Stats({ habits }) {
       </div>
 
       <div className="chart-box">
-        <h2>Resumen visual</h2>
+        <h2>Resumen del día</h2>
         <div style={{ width: "100%", height: 320 }}>
           <ResponsiveContainer>
             <BarChart data={barData}>
@@ -155,28 +168,51 @@ function Stats({ habits }) {
       <div className="chart-box" style={{ marginTop: "24px" }}>
         <h2>Progreso diario</h2>
         <div style={{ width: "100%", height: 320 }}>
-          <ResponsiveContainer>
-            <LineChart data={dailyStats}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="fecha" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Line type="monotone" dataKey="completados" />
-            </LineChart>
-          </ResponsiveContainer>
+          {dailyStats.length === 0 ? (
+            <p className="empty-message">Todavía no hay datos diarios registrados.</p>
+          ) : (
+            <ResponsiveContainer>
+              <LineChart data={dailyStats}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="fecha" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Line type="monotone" dataKey="completados" />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </div>
       </div>
 
       <div className="chart-box" style={{ marginTop: "24px" }}>
         <h2>Progreso semanal</h2>
         <div style={{ width: "100%", height: 320 }}>
+          {weeklyStats.length === 0 ? (
+            <p className="empty-message">Todavía no hay datos semanales registrados.</p>
+          ) : (
+            <ResponsiveContainer>
+              <BarChart data={weeklyStats}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="semana" />
+                <YAxis allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="completados" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </div>
+      </div>
+
+      <div className="chart-box" style={{ marginTop: "24px" }}>
+        <h2>Hábitos por categoría</h2>
+        <div style={{ width: "100%", height: 320 }}>
           <ResponsiveContainer>
-            <BarChart data={weeklyStats}>
+            <BarChart data={categoriasData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="semana" />
+              <XAxis dataKey="categoria" />
               <YAxis allowDecimals={false} />
               <Tooltip />
-              <Bar dataKey="completados" />
+              <Bar dataKey="cantidad" />
             </BarChart>
           </ResponsiveContainer>
         </div>

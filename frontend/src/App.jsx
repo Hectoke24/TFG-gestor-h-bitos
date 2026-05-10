@@ -10,6 +10,8 @@ import Rutinas from "./pages/Rutinas";
 function App() {
   const [habits, setHabits] = useState([]);
   const [nuevoHabito, setNuevoHabito] = useState("");
+  const [categoria, setCategoria] = useState("General");
+  const [filtroCategoria, setFiltroCategoria] = useState("Todas");
 
   const cargarHabitos = async () => {
     try {
@@ -36,7 +38,7 @@ function App() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ nombre: nuevoHabito })
+        body: JSON.stringify({ nombre: nuevoHabito, categoria })
       });
 
       if (!response.ok) {
@@ -74,48 +76,55 @@ function App() {
   };
 
   const eliminarHabito = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:3000/habits/${id}`, {
-        method: "DELETE"
-      });
+  const confirmar = window.confirm("¿Seguro que quieres eliminar este hábito?");
 
-      if (!response.ok) {
-        throw new Error("Error al eliminar el hábito");
-      }
+  if (!confirmar) return;
 
-      setHabits((prevHabits) =>
-        prevHabits.filter((habit) => habit.id !== id)
-      );
-    } catch (error) {
-      console.error("Error al eliminar el hábito:", error);
+  try {
+    const response = await fetch(`http://localhost:3000/habits/${id}`, {
+      method: "DELETE"
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al eliminar el hábito");
     }
+
+    setHabits((prevHabits) =>
+      prevHabits.filter((habit) => habit.id !== id)
+    );
+  } catch (error) {
+    console.error("Error al eliminar el hábito:", error);
+  }
   };
 
-  const editarHabito = async (id, nuevoNombre) => {
-    try {
-      const response = await fetch(`http://localhost:3000/habits/${id}/edit`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ nombre: nuevoNombre })
-      });
+  const editarHabito = async (id, nuevoNombre, nuevaCategoria) => {
+  try {
+    const response = await fetch(`http://localhost:3000/habits/${id}/edit`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        nombre: nuevoNombre,
+        categoria: nuevaCategoria
+      })
+    });
 
-      if (!response.ok) {
-        throw new Error("Error al editar el hábito");
-      }
-
-      const habitoActualizado = await response.json();
-
-      setHabits((prevHabits) =>
-        prevHabits.map((habit) =>
-          habit.id === id ? habitoActualizado : habit
-        )
-      );
-    } catch (error) {
-      console.error("Error al editar el hábito:", error);
+    if (!response.ok) {
+      throw new Error("Error al editar el hábito");
     }
-  };
+
+    const habitoActualizado = await response.json();
+
+    setHabits((prevHabits) =>
+      prevHabits.map((habit) =>
+        habit.id === id ? habitoActualizado : habit
+      )
+    );
+  } catch (error) {
+    console.error("Error al editar el hábito:", error);
+  }
+};
 
   return (
     <BrowserRouter>
@@ -130,10 +139,14 @@ function App() {
                 habits={habits}
                 nuevoHabito={nuevoHabito}
                 setNuevoHabito={setNuevoHabito}
+                categoria={categoria}
+                setCategoria={setCategoria}
                 agregarHabito={agregarHabito}
                 cambiarEstadoHabito={cambiarEstadoHabito}
                 eliminarHabito={eliminarHabito}
                 editarHabito={editarHabito}
+                filtroCategoria={filtroCategoria}
+                setFiltroCategoria={setFiltroCategoria}
               />
             }
           />

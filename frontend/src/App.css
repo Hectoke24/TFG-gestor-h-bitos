@@ -38,6 +38,14 @@ input {
   font-size: 16px;
 }
 
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+}
+
 button {
   padding: 10px 14px;
   border: none;
@@ -119,6 +127,13 @@ ul {
   background-color: #ef4444;
 }
 
+.habit-edit-fields {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
 .empty-message {
   text-align: center;
   color: #666;
@@ -173,7 +188,7 @@ ul {
 
 .stats-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   margin-top: 20px;
   margin-bottom: 30px;
@@ -185,6 +200,10 @@ ul {
   border-radius: 12px;
   padding: 18px;
   text-align: center;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .stats-card h3 {
@@ -210,73 +229,20 @@ ul {
   margin-bottom: 20px;
 }
 
-.rutinas-page {
-  margin-top: 10px;
-}
-
-.rutinas-subtitle {
-  text-align: center;
-  color: #6b7280;
-  margin-bottom: 24px;
-}
-
-.rutinas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-}
-
-.rutina-card {
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px;
-}
-
-.rutina-card h2 {
-  margin-top: 0;
-  margin-bottom: 12px;
-  font-size: 20px;
-}
-
-.rutina-card h3 {
-  margin-top: 18px;
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-.rutina-card p {
-  margin: 8px 0;
-  color: #374151;
-}
-
-.rutina-lista {
-  padding-left: 18px;
-  margin: 0;
-}
-
-.rutina-lista li {
-  background: none;
-  border: none;
-  padding: 0;
-  margin-bottom: 6px;
-  list-style: disc;
-}
-
-.rutinas-filtros {
+.filtros-habitos {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 24px;
+  margin: 20px 0 10px;
 }
 
-.rutinas-filtros button {
+.filtros-habitos button {
   background-color: #e5e7eb;
   color: #1f2937;
 }
 
-.rutinas-filtros button:hover {
+.filtros-habitos button:hover {
   background-color: #d1d5db;
 }
 
@@ -305,6 +271,11 @@ ul {
 
 .rutinas-filtros button:hover {
   background-color: #d1d5db;
+}
+
+.filtro-activo {
+  background-color: #2563eb !important;
+  color: white !important;
 }
 
 .rutinas-grid {
@@ -376,7 +347,102 @@ ul {
   color: #374151;
 }
 
-.filtro-activo {
-  background-color: #2563eb !important;
-  color: white !important;
+.rutinas-filtros button,
+.filtros-habitos button {
+  transition: 0.2s ease;
+}
+
+.rutina-card,
+.habit-card,
+.stats-card,
+.chart-box {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rutina-card:hover,
+.habit-card:hover,
+.stats-card:hover,
+.chart-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 20px 12px;
+    padding: 18px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-links {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  form {
+    flex-direction: column;
+  }
+
+  .habit-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .habit-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .habit-actions button {
+    width: 100%;
+  }
+
+  .habit-edit-fields {
+    flex-direction: column;
+  }
+
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .rutinas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rutina-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.habit-name-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.habit-category {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #374151;
+  font-weight: bold;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: 0.2s;
 }
