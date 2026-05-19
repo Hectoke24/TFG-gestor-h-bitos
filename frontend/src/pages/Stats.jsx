@@ -1,3 +1,4 @@
+// Importa los hooks de React y los componentes de Recharts para crear gráficos
 import { useEffect, useState } from "react";
 import {
   BarChart,
@@ -15,12 +16,15 @@ import {
   Line
 } from "recharts";
 
+// Stats recibe la lista de habitos desde App.tsx mediante props
 function Stats({ habits }) {
+  // Define estados para guardar las estadísticas diarias, semanales, la racha actual y la racha máxima
   const [dailyStats, setDailyStats] = useState([]);
   const [weeklyStats, setWeeklyStats] = useState([]);
   const [streak, setStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
 
+  // Calcula el total de hábitos, los completados hoy, los pendientes y el porcentaje de completados
   const totalHabitos = habits.length;
   const habitosCompletadosHoy = habits.filter((habit) => habit.completado).length;
   const habitosPendientes = totalHabitos - habitosCompletadosHoy;
@@ -28,6 +32,7 @@ function Stats({ habits }) {
   const porcentajeCompletados =
     totalHabitos > 0 ? Math.round((habitosCompletadosHoy / totalHabitos) * 100) : 0;
 
+  // Agrupa los hábitos por categoría y cuenta cuántos hay en cada una
   const categoriasData = Object.values(
     habits.reduce((acc, habit) => {
       const categoria = habit.categoria || "General";
@@ -41,9 +46,11 @@ function Stats({ habits }) {
     }, {})
   );
 
+  // useEffect para cargar las estadísticas desde el backend cada vez que cambian los hábitos
   useEffect(() => {
     const cargarEstadisticas = async () => {
       try {
+        // Obtiene desde el backend los habitos completados por dia
         const dailyResponse = await fetch("http://localhost:3000/habits/stats/daily");
         const dailyData = await dailyResponse.json();
 
@@ -54,6 +61,7 @@ function Stats({ habits }) {
 
         setDailyStats(datosDiarios);
 
+        // Obtiene desde el backend los habitos completados por semana
         const weeklyResponse = await fetch("http://localhost:3000/habits/stats/weekly");
         const weeklyData = await weeklyResponse.json();
 
@@ -64,6 +72,7 @@ function Stats({ habits }) {
 
         setWeeklyStats(datosSemanales);
 
+        // Obtiene desde el backend la racha actual y la racha máxima
         const streakResponse = await fetch("http://localhost:3000/habits/stats/streak");
         const streakData = await streakResponse.json();
         setStreak(streakData.rachaActual);
@@ -79,6 +88,7 @@ function Stats({ habits }) {
     cargarEstadisticas();
   }, [habits]);
 
+  // Prepara los datos para los gráficos de barras y pastel
   const barData = [
     { nombre: "Completados hoy", cantidad: habitosCompletadosHoy },
     { nombre: "Pendientes", cantidad: habitosPendientes }
@@ -91,10 +101,12 @@ function Stats({ habits }) {
 
   const COLORS = ["#86efac", "#fdba74"];
 
+  // Devuelve la interfaz visual de la pagina de estadisticas
   return (
     <div className="stats-page">
       <h1>Estadísticas</h1>
 
+      // Muestra las estadísticas principales en tarjetas
       <div className="stats-cards">
         <div className="stats-card">
           <h3>Total</h3>
@@ -131,6 +143,7 @@ function Stats({ habits }) {
         <h2>Resumen del día</h2>
         <div style={{ width: "100%", height: 320 }}>
           <ResponsiveContainer>
+            // Gráfico de barras para mostrar los hábitos completados y pendientes hoy
             <BarChart data={barData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="nombre" />
@@ -146,6 +159,7 @@ function Stats({ habits }) {
         <h2>Distribución de hábitos</h2>
         <div style={{ width: "100%", height: 320 }}>
           <ResponsiveContainer>
+            // Gráfico de pastel para mostrar la proporción de hábitos completados y pendientes hoy
             <PieChart>
               <Pie
                 data={pieData}
@@ -168,6 +182,7 @@ function Stats({ habits }) {
       <div className="chart-box" style={{ marginTop: "24px" }}>
         <h2>Progreso diario</h2>
         <div style={{ width: "100%", height: 320 }}>
+          // Gráfico de líneas para mostrar la evolución de los hábitos completados por día
           {dailyStats.length === 0 ? (
             <p className="empty-message">Todavía no hay datos diarios registrados.</p>
           ) : (
@@ -187,6 +202,7 @@ function Stats({ habits }) {
       <div className="chart-box" style={{ marginTop: "24px" }}>
         <h2>Progreso semanal</h2>
         <div style={{ width: "100%", height: 320 }}>
+          // Gráfico de barras para mostrar la evolución de los hábitos completados por semana
           {weeklyStats.length === 0 ? (
             <p className="empty-message">Todavía no hay datos semanales registrados.</p>
           ) : (
@@ -207,6 +223,7 @@ function Stats({ habits }) {
         <h2>Hábitos por categoría</h2>
         <div style={{ width: "100%", height: 320 }}>
           <ResponsiveContainer>
+            // Muestra cuantos habitos hay en cada categoría utilizando un gráfico de barras
             <BarChart data={categoriasData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="categoria" />

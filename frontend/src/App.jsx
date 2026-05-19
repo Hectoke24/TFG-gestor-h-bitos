@@ -1,3 +1,4 @@
+// Aqui se importan las herramientas necesarias y componentes necesarios para que funcione la app
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -8,11 +9,13 @@ import Stats from "./pages/Stats";
 import Rutinas from "./pages/Rutinas";
 
 function App() {
+  // Define los estados principales de la aplicación: lista de hábitos, nuevo hábito, categoría seleccionada y filtro de categoría 
   const [habits, setHabits] = useState([]);
   const [nuevoHabito, setNuevoHabito] = useState("");
   const [categoria, setCategoria] = useState("General");
   const [filtroCategoria, setFiltroCategoria] = useState("Todas");
 
+  // Carga los hábitos desde el backend al iniciar la aplicación
   const cargarHabitos = async () => {
     try {
       const response = await fetch("http://localhost:3000/habits");
@@ -27,6 +30,7 @@ function App() {
     cargarHabitos();
   }, []);
 
+  // Permite crear un nuevo habito desde el frontend
   const agregarHabito = async (e) => {
     e.preventDefault();
 
@@ -53,6 +57,7 @@ function App() {
     }
   };
 
+  // Permite cambiar el estado de un hábito (completado o no completado)
   const cambiarEstadoHabito = async (id) => {
     try {
       const response = await fetch(`http://localhost:3000/habits/${id}`, {
@@ -75,6 +80,7 @@ function App() {
     }
   };
 
+  // Permite eliminar un hábito desde el frontend
   const eliminarHabito = async (id) => {
   const confirmar = window.confirm("¿Seguro que quieres eliminar este hábito?");
 
@@ -97,6 +103,7 @@ function App() {
   }
   };
 
+  // Permite editar un hábito desde el frontend
   const editarHabito = async (id, nuevoNombre, nuevaCategoria) => {
   try {
     const response = await fetch(`http://localhost:3000/habits/${id}/edit`, {
@@ -126,6 +133,7 @@ function App() {
   }
 };
 
+  // Define la estructura visual principal de la aplicacion y configura la aplicacion
   return (
     <BrowserRouter>
       <div className="container">

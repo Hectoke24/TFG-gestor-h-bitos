@@ -1,6 +1,8 @@
+// Importa los componentes necesarios para la página de inicio
 import HabitForm from "../components/HabitForm";
 import HabitList from "../components/HabitList";
 
+// Home recibe desde app.tsx todos los datos y funciones necesarias para manejar los hábitos, el formulario y los filtros
 function Home({
   habits,
   nuevoHabito,
@@ -14,11 +16,13 @@ function Home({
   eliminarHabito,
   editarHabito
 }) {
+  // Crea una lista de habitos filtrados segun la categoria seleccionada
   const habitsFiltrados =
     filtroCategoria === "Todas"
       ? habits
       : habits.filter((habit) => habit.categoria === filtroCategoria);
   
+  // Calcula el total de hábitos y cuántos se han completado hoy para mostrarlo en la parte superior de la página
   const totalHabitos = habits.length;
   const completadosHoy = habits.filter((habit) => habit.completado).length;
 

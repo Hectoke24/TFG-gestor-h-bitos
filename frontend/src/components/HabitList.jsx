@@ -1,16 +1,21 @@
+// Importa useState para manejar el estado de edición dentro del componente
 import { useState } from "react";
 
+// Componente para mostrar la lista de hábitos, con opciones para cambiar su estado, editarlos o eliminarlos
 function HabitList({ habits, cambiarEstadoHabito, eliminarHabito, editarHabito }) {
+  // Define estados internos para manejar la edición de hábitos
   const [editandoId, setEditandoId] = useState(null);
   const [nuevoNombre, setNuevoNombre] = useState("");
   const [nuevaCategoria, setNuevaCategoria] = useState("General");
 
+  // Activa el modo edicion para un habito concreto
   const empezarEdicion = (habit) => {
     setEditandoId(habit.id);
     setNuevoNombre(habit.nombre);
     setNuevaCategoria(habit.categoria || "General");
   };
 
+  // Guarda los cambios realizados en un hábito editado
   const guardarEdicion = async (id) => {
     if (nuevoNombre.trim() === "") return;
 
@@ -20,12 +25,14 @@ function HabitList({ habits, cambiarEstadoHabito, eliminarHabito, editarHabito }
     setNuevaCategoria("General");
   };
 
+  // Cancela el modo edición sin guardar cambios
   const cancelarEdicion = () => {
     setEditandoId(null);
     setNuevoNombre("");
     setNuevaCategoria("General");
   };
 
+  // Si no hay hábitos, muestra un mensaje indicando que aún no se han creado
   if (habits.length === 0) {
     return <p className="empty-message">Todavía no hay hábitos creados.</p>;
   }
@@ -40,6 +47,7 @@ function HabitList({ habits, cambiarEstadoHabito, eliminarHabito, editarHabito }
           <div className="habit-top">
             {editandoId === habit.id ? (
               <div className="habit-edit-fields">
+                //Permite modificar el nombre y la categoría del hábito mientras se está editando
                 <input
                   type="text"
                   value={nuevoNombre}
@@ -59,6 +67,7 @@ function HabitList({ habits, cambiarEstadoHabito, eliminarHabito, editarHabito }
               </div>
             ) : (
               <>
+                // Muestra el nombre, categoría y estado del hábito cuando no se está editando
                 <div className="habit-name-block">
                   <span className="habit-name">{habit.nombre}</span>
                   <span className="habit-category">{habit.categoria}</span>
@@ -70,6 +79,7 @@ function HabitList({ habits, cambiarEstadoHabito, eliminarHabito, editarHabito }
             )}
           </div>
 
+          // Si el habito esta en modo edicion, muestra botones para guardar o cancelar.
           <div className="habit-actions">
             {editandoId === habit.id ? (
               <>
@@ -82,6 +92,7 @@ function HabitList({ habits, cambiarEstadoHabito, eliminarHabito, editarHabito }
               </>
             ) : (
               <>
+                // Muestra los botones principales para gestionar cada habito
                 <button type="button" onClick={() => cambiarEstadoHabito(habit.id)}>
                   {habit.completado ? "Marcar como pendiente" : "Marcar como hecho"}
                 </button>
