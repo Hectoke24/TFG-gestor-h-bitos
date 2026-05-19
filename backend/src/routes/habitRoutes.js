@@ -1,11 +1,11 @@
-// Se importa Express para crear rutas y se importa pool para interactuar con la base de datos PostgreSQL
-// Despues se crea un router, que sirve para agrupar todas las rutas relacionadas con los habitos
+{/* Se importa Express para crear rutas y se importa pool para interactuar con la base de datos PostgreSQL */}
+{/* Despues se crea un router, que sirve para agrupar todas las rutas relacionadas con los habitos */}
 const express = require("express");
 const pool = require("../config/db");
 
 const router = express.Router();
 
-// Ruta para obtener todos los hábitos junto con su estado de completado para el día actual
+{/* Ruta para obtener todos los hábitos junto con su estado de completado para el día actual */}
 router.get("/", async (req, res) => {
   const fechaHoy = new Date().toISOString().split("T")[0];
 
@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Ruta para añadir/crear un nuevo hábito a la base de datos
+{/* Ruta para añadir/crear un nuevo hábito a la base de datos */}
 router.post("/", async (req, res) => {
   const { nombre, categoria } = req.body;
 
@@ -58,7 +58,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Ruta para actualizar el estado de completado de un hábito para el día actual. Si el habito ya esta completado, se elimina el registro de completado para ese día, y si no esta completado, se añade un nuevo registro y pasa a pendiente.
+{/* Ruta para actualizar el estado de completado de un hábito para el día actual. Si el habito ya esta completado, se elimina el registro de completado para ese día, y si no esta completado, se añade un nuevo registro y pasa a pendiente. */}
 router.put("/:id", async (req, res) => {
   const id = parseInt(req.params.id, 10);
   const fechaHoy = new Date().toISOString().split("T")[0];
@@ -106,7 +106,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Ruta para editar el nombre y la categoría de un hábito existente
+{/* Ruta para editar el nombre y la categoría de un hábito existente */}
 router.put("/:id/edit", async (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { nombre, categoria } = req.body;
@@ -132,7 +132,7 @@ router.put("/:id/edit", async (req, res) => {
   }
 });
 
-// Ruta para eliminar un hábito de la base de datos.
+{/* Ruta para eliminar un hábito de la base de datos */}
 router.delete("/:id", async (req, res) => {
   const id = parseInt(req.params.id, 10);
 
@@ -153,7 +153,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// Obtiene el numero de hábitos completados por día, agrupados por fecha
+{/* Obtiene el numero de hábitos completados por día, agrupados por fecha */}
 router.get("/stats/daily", async (req, res) => {
   try {
     const result = await pool.query(`
@@ -171,7 +171,7 @@ router.get("/stats/daily", async (req, res) => {
   }
 });
 
-// Obtiene el numero de hábitos completados por semana, agrupados por semana (formato IYYY-IW)
+{/* Obtiene el numero de hábitos completados por semana, agrupados por semana (formato IYYY-IW) */}
 router.get("/stats/weekly", async (req, res) => {
   try {
     const result = await pool.query(`
@@ -189,7 +189,7 @@ router.get("/stats/weekly", async (req, res) => {
   }
 });
 
-// Calcula la racha actual de dias consecutivos con habitos completados.
+{/* Calcula la racha actual de dias consecutivos con habitos completados. */}
 router.get("/stats/streak", async (req, res) => {
   try {
     const result = await pool.query(`
@@ -231,7 +231,7 @@ router.get("/stats/streak", async (req, res) => {
   }
 });
 
-// Calcula la racha máxima de días consecutivos con hábitos completados.
+{/* Calcula la racha máxima de días consecutivos con hábitos completados. */}
 router.get("/stats/max-streak", async (req, res) => {
   try {
     const result = await pool.query(`
