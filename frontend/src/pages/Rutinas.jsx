@@ -91,7 +91,7 @@ function Rutinas() {
 
             <p className="rutina-descripcion">{rutina.descripcion}</p>
 
-            // Muestra la lista de ejercicios que componen la rutina
+            {/* Muestra la lista de ejercicios que componen la rutina */}
             <h3>Ejercicios</h3>
             <ul className="rutina-lista">
               {rutina.ejercicios.map((ejercicio, index) => (
