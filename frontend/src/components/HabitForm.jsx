@@ -1,5 +1,7 @@
+// Componente para el formulario de creación de hábitos
 function HabitForm({ nuevoHabito, setNuevoHabito, categoria, setCategoria, agregarHabito }) {
   return (
+    // crea el formulario y ejecuta agregarHabitos cuando el usuario lo envía
     <form onSubmit={agregarHabito}>
       <input
         type="text"
